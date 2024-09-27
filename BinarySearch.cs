@@ -8,20 +8,20 @@ namespace SearchAlgorithm
 {
     internal class BinarySearch
     {
-        public static int Perform(double searchValue, List<double> listToSeach)
+        public static int Perform(double searchValue, List<double> listToSearch)
         {
             int left = 0;
-            int right = listToSeach.Count - 1;
+            int right = listToSearch.Count - 1;
 
             while (left <= right)
             {
                 int mid = (left + right) / 2;
 
-                if (listToSeach[mid] == searchValue)
+                if (listToSearch[mid] == searchValue)
                 {
                     return mid;
                 }
-                else if (listToSeach[mid] < searchValue)
+                else if (listToSearch[mid] < searchValue)
                 {
                     left = mid + 1;
                 }

@@ -13,6 +13,9 @@ namespace SearchAlgorithm
         static Random randomGenerator = new Random();
         static int counter = 0; //counter for watch
         static System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
+        static int userOption1;
+        static int userOption2;
+
         static void Main(string[] args)
         {
             long timeTaken;
@@ -21,15 +24,16 @@ namespace SearchAlgorithm
             List<double> listOfDoubles = new List<double>();
             List<string> listOfStrings = new List<string>();
 
-            int userOption1=0;
+            userOption1 = -1;
             // For List Type Menu
             while (userOption1 < 0 || userOption1 > 3) // loop to check if option is valid or not
             {
+                Console.WriteLine("MENU");
                 Console.WriteLine("SELECT THE TYPE OF LIST YOU WANT TO IMPLEMENT");
                 Console.WriteLine("1. Numerical List");
                 Console.WriteLine("2. String List");
                 userOption1 = int.Parse(Console.ReadLine());
-                if ( userOption1 < 0 || userOption1 > 3)
+                if (userOption1 < 0 || userOption1 > 3)
                 {
                     Console.WriteLine("Inavlid Input. Please enter an option between 1 and 3.");
                 }
@@ -38,7 +42,7 @@ namespace SearchAlgorithm
             int size = 0;
             while (size < 1 || size > 1000) // loop to check if option is valid or not
             {
-                Console.WriteLine("How many elements do you need in your list?(1-1000) ");
+                Console.WriteLine("\n How many elements do you need in your list?(1-1000) ");
                 bool isValid = int.TryParse(Console.ReadLine(), out size);
                 if (!isValid || size < 1 || size > 1000)
                 {
@@ -56,10 +60,10 @@ namespace SearchAlgorithm
             }
 
             // For Search Menu
-            int userOption2 = 0;
+            userOption2 = -1;
             while (userOption2 < 0 || userOption2 > 4) // loop to check if option is valid or not
             {
-                Console.WriteLine("SELECT THE SEARCH METHOD YOU WANT TO IMPLEMENT");
+                Console.WriteLine("\n SELECT THE SEARCH METHOD YOU WANT TO IMPLEMENT");
                 Console.WriteLine("1. Linear Search");
                 Console.WriteLine("2. Binary Search");
                 Console.WriteLine("3. Jump Search");
@@ -69,7 +73,11 @@ namespace SearchAlgorithm
                     Console.WriteLine("Inavlid Input. Please enter an option between 1 and 3.");
                 }
             }
-            PrintList(listOfDoubles);
+            if (userOption1 == 1)
+                doublePrintList(listOfDoubles);
+            else
+                stringPrintList(listOfStrings);
+
             watch.Stop();// stop the watch
             timeTaken = watch.ElapsedMilliseconds; // saved the time in a variable
             TimeUsed(timeTaken);
@@ -77,10 +85,12 @@ namespace SearchAlgorithm
             watch.Reset();// reset the time to start the time again
             watch.Start();
 
-            if (userOption2 == 1 && userOption1 == 1)
-            doubleRequestSearch(listOfDoubles);
+            if (userOption1 == 1 && (userOption2 == 1 || userOption2 == 2 || userOption2 == 3))
+                doubleRequestSearch(listOfDoubles);
 
-            PrintList(listOfDoubles);
+            else
+                stringRequestSearch(listOfStrings);
+
             watch.Stop();
             timeTaken = watch.ElapsedMilliseconds; // saved the time in a variable
             TimeUsed(timeTaken);
@@ -102,9 +112,14 @@ namespace SearchAlgorithm
 
             if (Double.TryParse(Console.ReadLine(), out searchValue))
             {
-                //int index = LinearSearch.Perform(searchValue, list);
-                int index = JumpSearch.Perform(searchValue, list);
-                //int index = BinarySearch.Perform(searchValue, list);
+                int index;
+                if (userOption2 == 1)
+                    index = LinearSearch.Perform(searchValue, list);
+                else if (userOption2 == 2)
+                    index = BinarySearch.Perform(searchValue, list);
+                else
+                    index = JumpSearch.Perform(searchValue, list);
+
                 if (index < 0)
                 {
                     Console.WriteLine("Not Found");
@@ -113,30 +128,32 @@ namespace SearchAlgorithm
                 {
                     Console.WriteLine("Found at: " + (index + 1));
                 }
-
             }
         }
         static void stringRequestSearch(List<string> list)
         {
             counter = 1;
-            string searchValue;
             Console.WriteLine("What value would you like to search for? ");
+            string searchValue = Console.ReadLine();
+            int index;
 
-            if ()
+            if (userOption2 == 1)
+                index = LinearSearch.Perform(searchValue, list);
+            else if (userOption2 == 2)
+                index = BinarySearch.Perform(searchValue, list);
+            else
+                index = JumpSearch.Perform(searchValue, list);
+
+            if (index < 0)
             {
-                //int index = LinearSearch.Perform(searchValue, list);
-                int index = JumpSearch.Perform(searchValue, list);
-                //int index = BinarySearch.Perform(searchValue, list);
-                if (index < 0)
-                {
-                    Console.WriteLine("Not Found");
-                }
-                else
-                {
-                    Console.WriteLine("Found at: " + (index + 1));
-                }
-
+                Console.WriteLine("Not Found");
             }
+            else
+            {
+                Console.WriteLine("Found at: " + (index + 1));
+            }
+
+
         }
 
         static void PopulateListWithRandomDoubles(ref List<double> list, int size)
@@ -168,7 +185,7 @@ namespace SearchAlgorithm
         }
 
 
-        static void PrintList(List<double> list)
+        static void doublePrintList(List<double> list)
         {
             Console.WriteLine("\n\nLIST PRINT\n");
             for (int i = 0; i < list.Count; i++)
@@ -178,6 +195,18 @@ namespace SearchAlgorithm
 
             Console.WriteLine("\n END \n");
         }
+        static void stringPrintList(List<string> strings)
+        {
+
+            Console.WriteLine("\n\nLIST PRINT\n");
+            for (int i = 0; i < strings.Count; i++)
+            {
+                Console.WriteLine("(" + (i + 1) + ") " + strings[i]);
+            }
+
+            Console.WriteLine("\n END \n");
+        }
+
         static void TimeUsed(long time)
         {
             if (counter == 0)

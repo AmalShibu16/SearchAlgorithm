@@ -11,7 +11,7 @@ namespace SearchAlgorithm
     internal class Program
     {
         static Random randomGenerator = new Random();
-        static int counter = 0;
+        static int counter = 0; //counter for watch
         static System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
         static void Main(string[] args)
         {
@@ -19,8 +19,56 @@ namespace SearchAlgorithm
             watch.Start();// start the watch
 
             List<double> listOfDoubles = new List<double>();
+            List<string> listOfStrings = new List<string>();
 
-            PopulateListWithRandomDoubles(ref listOfDoubles, 100);
+            int userOption1=0;
+            // For List Type Menu
+            while (userOption1 < 0 || userOption1 > 3) // loop to check if option is valid or not
+            {
+                Console.WriteLine("SELECT THE TYPE OF LIST YOU WANT TO IMPLEMENT");
+                Console.WriteLine("1. Numerical List");
+                Console.WriteLine("2. String List");
+                userOption1 = int.Parse(Console.ReadLine());
+                if ( userOption1 < 0 || userOption1 > 3)
+                {
+                    Console.WriteLine("Inavlid Input. Please enter an option between 1 and 3.");
+                }
+            }
+
+            int size = 0;
+            while (size < 1 || size > 1000) // loop to check if option is valid or not
+            {
+                Console.WriteLine("How many elements do you need in your list?(1-1000) ");
+                bool isValid = int.TryParse(Console.ReadLine(), out size);
+                if (!isValid || size < 1 || size > 1000)
+                {
+                    Console.WriteLine("Inavlid Input. Please enter a number between 1 and 1000.");
+                }
+            }
+
+            if (userOption1 == 1)
+            {
+                PopulateListWithRandomDoubles(ref listOfDoubles, size);
+            }
+            else
+            {
+                PopulateListWithRandomStrings(ref listOfStrings, size);
+            }
+
+            // For Search Menu
+            int userOption2 = 0;
+            while (userOption2 < 0 || userOption2 > 4) // loop to check if option is valid or not
+            {
+                Console.WriteLine("SELECT THE SEARCH METHOD YOU WANT TO IMPLEMENT");
+                Console.WriteLine("1. Linear Search");
+                Console.WriteLine("2. Binary Search");
+                Console.WriteLine("3. Jump Search");
+                userOption2 = int.Parse(Console.ReadLine());
+                if (userOption2 < 0 || userOption2 > 4)
+                {
+                    Console.WriteLine("Inavlid Input. Please enter an option between 1 and 3.");
+                }
+            }
             PrintList(listOfDoubles);
             watch.Stop();// stop the watch
             timeTaken = watch.ElapsedMilliseconds; // saved the time in a variable
@@ -28,7 +76,10 @@ namespace SearchAlgorithm
 
             watch.Reset();// reset the time to start the time again
             watch.Start();
-            RequestSearch(listOfDoubles);
+
+            if (userOption2 == 1 && userOption1 == 1)
+            doubleRequestSearch(listOfDoubles);
+
             PrintList(listOfDoubles);
             watch.Stop();
             timeTaken = watch.ElapsedMilliseconds; // saved the time in a variable
@@ -37,7 +88,7 @@ namespace SearchAlgorithm
             Console.ReadKey();
         }
 
-        static void RequestSearch(List<double> list)
+        static void doubleRequestSearch(List<double> list)
         {
             counter = 1;
             Double searchValue;
@@ -65,6 +116,28 @@ namespace SearchAlgorithm
 
             }
         }
+        static void stringRequestSearch(List<string> list)
+        {
+            counter = 1;
+            string searchValue;
+            Console.WriteLine("What value would you like to search for? ");
+
+            if ()
+            {
+                //int index = LinearSearch.Perform(searchValue, list);
+                int index = JumpSearch.Perform(searchValue, list);
+                //int index = BinarySearch.Perform(searchValue, list);
+                if (index < 0)
+                {
+                    Console.WriteLine("Not Found");
+                }
+                else
+                {
+                    Console.WriteLine("Found at: " + (index + 1));
+                }
+
+            }
+        }
 
         static void PopulateListWithRandomDoubles(ref List<double> list, int size)
         {
@@ -75,6 +148,25 @@ namespace SearchAlgorithm
             }
             list.Sort();
         }
+
+        public static void PopulateListWithRandomStrings(ref List<string> strings, int size)
+        {
+            for (int a = 0; a < size; a++)
+            {
+                int stringlength = randomGenerator.Next(4, 8);
+                StringBuilder generatedString = new StringBuilder();
+
+                for (int i = 0; i < stringlength; i++)
+                {
+                    int randvalue = randomGenerator.Next(0, 26);
+                    char letter = Convert.ToChar(randvalue + 65);// 65 ASCII value of "A"
+                    generatedString.Append(letter);
+                }
+                strings.Add(generatedString.ToString());
+            }
+            strings.Sort();
+        }
+
 
         static void PrintList(List<double> list)
         {

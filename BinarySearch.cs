@@ -33,5 +33,31 @@ namespace SearchAlgorithm
             return -1;
 
         }
+        public static int Perform(string searchValue, List<string> listToSearch)
+        {
+            int left = 0;
+            int right = listToSearch.Count - 1;
+
+            while (left <= right)
+            {
+                int mid = (left + right) / 2;
+
+                if (string.Compare(listToSearch[mid],searchValue)==0)
+                {
+                    return mid;
+                }
+                else if (string.Compare(listToSearch[mid],searchValue)<0)
+                {
+                    left = mid + 1;
+                }
+                else
+                {
+                    right = mid - 1;
+                }
+            }
+            return -1;
+
+        }
     }
+
 }
